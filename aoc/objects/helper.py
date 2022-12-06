@@ -6,6 +6,10 @@ class LibraryExecuteArgs(TypedDict):
     variant: int
 
 
+class LibraryAssignRegistryArgs(TypedDict):
+    year: int
+
+
 class EventExecuteArgs(TypedDict):
     variant: int
 

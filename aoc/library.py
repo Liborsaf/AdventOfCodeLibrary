@@ -6,10 +6,10 @@ from typing_extensions import Unpack
 
 import requests
 
-from .objects.helper import LibraryExecuteArgs
+from .objects.helper import LibraryExecuteArgs, LibraryAssignRegistryArgs
 
 if TYPE_CHECKING:
-    from aoc import AdventOfCodeEvent, AdventOfCodeTask
+    from aoc import AdventOfCodeEvent, AdventOfCodeTask, AdventOfCodeRegistry
 
 
 class AdventOfCodeConfig:
@@ -30,6 +30,7 @@ class AdventOfCode:
         self.config = AdventOfCodeConfig()
 
         self.events = {}
+        self.registries = {}
         self.last_year = 0
         self.manual_input: Optional[str] = None
 
@@ -61,6 +62,12 @@ class AdventOfCode:
 
     def register_task(self, day: int, task: Type[AdventOfCodeTask]):
         self.events[self.last_year].register_task(day, task)
+
+    def assign_registry(self, registry: Type[AdventOfCodeRegistry], **kwargs: Unpack[LibraryAssignRegistryArgs]):
+        kwargs.setdefault('year', self.last_year)
+        year = kwargs.get('year')
+
+        self.registries[year] = registry
 
     def execute(self, day: int, **kwargs: Unpack[LibraryExecuteArgs]):
         event = self.get_event(kwargs.get('year'))
